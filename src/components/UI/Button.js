@@ -1,7 +1,8 @@
 import { h as html } from "stage0";
 import styles from "stage0/styles";
 
-import theme from "../theme";
+import { addClass } from "../../helpers/utils";
+import theme from "../../theme";
 
 const SpinnerStyle = styles({
   base: {
@@ -10,7 +11,9 @@ const SpinnerStyle = styles({
   }
 });
 
-const Spinner = html`<img src="spinner.svg" class=${SpinnerStyle.base} alt="Loading" />`;
+const Spinner = html`
+  <img src="spinner.svg" class=${SpinnerStyle.base} alt="Loading" />
+`;
 
 const ButtonStyle = styles({
   base: {
@@ -27,9 +30,9 @@ const ButtonStyle = styles({
     border: "1px solid transparent",
     "font-weight": 500,
     outline: "none",
-
+    padding: "0 1rem",
+    opacity: 1,
     color: theme.placeholder,
-
     "::before, ::after": {
       "box-sizing": "inherit",
       "-webkit-font-smoothing": "antialiased"
@@ -39,17 +42,8 @@ const ButtonStyle = styles({
     },
     ":hover": {
       cursor: "pointer"
-    },
-
-    block: {
-      width: "100%"
-    },
-
-    marginTop: {
-      "margin-top": "1.5rem"
     }
   },
-
   primary: {
     "background-color": theme.primary,
     "border-color": theme.white,
@@ -57,42 +51,67 @@ const ButtonStyle = styles({
     height: "2.8rem",
     display: "inline-flex",
     "align-items": "center",
-    "justify-content": "center",
-
-    large: {
-      height: "3.25rem"
-    }
+    "justify-content": "center"
   },
-
   text: {
     color: theme.dark,
     "font-weight": 500,
     "font-size": `${theme.textSmall} !important`,
     "text-decoration": "underline",
     padding: 0,
-
     ":hover": {
       color: theme.primary
     }
+  },
+  noPadding: {
+    padding: 0
+  },
+  disabled: {
+    opacity: 0.5,
+    ":hover": {
+      cursor: "not-allowed"
+    }
+  },
+  block: {
+    width: "100%"
+  },
+  marginTop: {
+    "margin-top": "1.5rem"
+  },
+  large: {
+    height: "3.25rem"
   }
 });
 
-const ButtonView = html`
-  <button class="${ButtonStyle.base}">Buy Button</button>
+const View = html`
+  <button class="${ButtonStyle.base}">#text</button>
 `;
 
 export default function Button(item = {}) {
-  const root = ButtonView;
-  const { type, block, marginTop, large, loading } = item;
+  const {
+    text,
+    type,
+    block,
+    large,
+    loading,
+    disabled,
+    marginTop,
+    noPadding
+  } = item;
+  const root = View;
+  const refs = View.collect(root);
+  const buttonText = refs.text;
 
-  if (block) root.classList.add(ButtonStyle.base.block);
-  if (marginTop) root.classList.add(ButtonStyle.base.marginTop);
-  if (large) root.classList.add(ButtonStyle.primary.large);
-  if (type) root.classList.add(ButtonStyle[type]);
+  root.update = text => (buttonText.nodeValue = text);
+  root.update(text);
 
-  if (loading) {
-    return Spinner;
-  } else {
-    return root;
-  }
+  if (noPadding) addClass(root, noPadding);
+  if (type) addClass(root, ButtonStyle[type]);
+  if (block) addClass(root, ButtonStyle.block);
+  if (large) addClass(root, ButtonStyle.large);
+  if (disabled) addClass(root, ButtonStyle.disabled);
+  if (marginTop) addClass(root, ButtonStyle.marginTop);
+
+  if (loading) return Spinner;
+  else return root;
 }

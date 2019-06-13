@@ -1,29 +1,45 @@
 import { h as html } from "stage0";
-import { setupSyntheticEvent } from "stage0/syntheticEvents";
 
-import Button from "./Button";
+import { store } from "../model";
 
-setupSyntheticEvent("click");
+import Button from "./UI/Button";
+
+function addItem(item) {
+  item.moltinType !== "custom"
+    ? store.dispatch("addItem", { id: item.moltinProductId })
+    : store.dispatch("addItem", {
+        type: "custom_item",
+        name: item.moltinProductName,
+        sku: item.moltinProductSku,
+        price: {
+          amount: parseInt(item.moltinProductPrice, 10)
+        }
+      });
+
+  item.moltinOpenCart && store.dispatch("goToCart");
+}
 
 const View = html`
-  <span class="shopkit-button"></span>
+  <span class="shopkit-buy-button"></span>
 `;
-View.appendChild(
-  Button({
-    type: "primary",
-    // loading: true
-  })
-);
 
-export default function BuyButton(item, scope) {
-  // console.log(item, scope);
+export default function BuyButton(item) {
+  const { moltinText, moltinType, moltinProductId } = item;
+
+  if (moltinType !== "custom" && !moltinProductId) {
+    console.warn("No product ID provided to Moltin Btn.");
+    return null;
+  }
+
+  View.appendChild(
+    Button({
+      text: moltinText || "Add to Cart",
+      type: "primary"
+    })
+  );
 
   const root = View.cloneNode(true);
-  const refs = View.collect(root);
-
-  // console.log(refs);
-
-  root.__click = () => console.debug(item);
+  root.__click = () => addItem(item);
 
   return root;
 }

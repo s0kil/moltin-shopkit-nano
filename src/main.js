@@ -1,5 +1,10 @@
 import fastdom from "fastdom";
 import fastdomPromised from "fastdom/extensions/fastdom-promised";
+import { setupSyntheticEvent } from "stage0/syntheticEvents";
+
+import { inEach } from "./helpers/utils";
+import { MoltinClient } from "./services/moltin";
+import { setApiHandler, fetchController } from "./helpers/api";
 
 import BuyButton from "./components/BuyButton";
 import CartButton from "./components/CartButton";
@@ -7,7 +12,11 @@ import CartButton from "./components/CartButton";
 const FastDom = fastdom.extend(fastdomPromised);
 
 function initialize(document) {
-  let script, moltinClientId, moltinStripePublishableKey, moltinCurrency;
+  let script,
+    moltinClient,
+    moltinClientId,
+    moltinStripePublishableKey,
+    moltinCurrency;
 
   FastDom.measure(() => {
     script = document.querySelector("script[data-moltin-client-id]");
@@ -31,33 +40,41 @@ function initialize(document) {
       );
       return;
     }
+
+    moltinClient = new MoltinClient({
+      fetch: fetchController,
+      client_id: moltinClientId,
+      application: "moltin-btn",
+      ...(moltinCurrency && { moltinCurrency })
+    });
+    setApiHandler(moltinClient);
   });
 
   let buyButtons;
   FastDom.measure(() => {
     buyButtons = [...document.getElementsByClassName("moltin-buy-button")];
   }).then(() => {
-    let buyButtonsLength = buyButtons.length;
-    while (buyButtonsLength--) {
-      let buyButton = buyButtons[buyButtonsLength];
+    inEach(buyButtons, buyButton => {
       FastDom.mutate(() =>
         buyButton.appendChild(BuyButton({ ...buyButton.dataset }))
       );
-    }
+    });
   });
 
   let cartButtons;
   FastDom.measure(() => {
     cartButtons = [...document.getElementsByClassName("moltin-cart-button")];
   }).then(() => {
-    let cartButtonsLength = cartButtons.length;
-    while (cartButtonsLength--) {
-      let cartButton = cartButtons[cartButtonsLength];
+    inEach(cartButtons, cartButton => {
       FastDom.mutate(() =>
-        cartButton.appendChild(CartButton({ ...cartButton.dataset }))
+        cartButton.appendChild(
+          CartButton({ loading: true, ...cartButton.dataset })
+        )
       );
-    }
+    });
   });
+
+  setupSyntheticEvent("click");
 }
 
 document.onreadystatechange = () => {

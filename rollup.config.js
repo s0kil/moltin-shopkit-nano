@@ -1,18 +1,19 @@
-import babel from "rollup-plugin-babel";
+// import babel from "rollup-plugin-babel";
 import sizes from "rollup-plugin-sizes";
 import replace from "rollup-plugin-replace";
 import { terser } from "rollup-plugin-terser";
 import commonjs from "rollup-plugin-commonjs";
 import resolve from "rollup-plugin-node-resolve";
 import livereload from "rollup-plugin-livereload";
-import minifyliterals from "rollup-plugin-minifyliterals";
+import multiEntry from "rollup-plugin-multi-entry";
+// import minifyliterals from "rollup-plugin-minifyliterals";
 import { sizeSnapshot } from "rollup-plugin-size-snapshot";
 
 const mode = process.env.NODE_ENV;
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
-  input: "src/main.js",
+  input: ["src/main.js", "src/cart.js"],
 
   output: {
     file: "dist/app.js",
@@ -22,6 +23,8 @@ export default {
   },
 
   plugins: [
+    multiEntry(),
+
     replace({
       "process.browser": true,
       "process.env.NODE_ENV": JSON.stringify(mode)
@@ -34,26 +37,33 @@ export default {
 
     commonjs(),
 
-    // minifyliterals(),
-
+    /*
     babel({
       exclude: "node_modules/**",
       presets: [["@babel/preset-env"]],
-      // plugins: [["@babel/plugin-transform-runtime"]],
+      plugins: [],
       runtimeHelpers: true,
       babelrc: false
     }),
+    */
+
+    // minifyliterals(),
 
     !production && livereload("dist"),
 
     production && sizeSnapshot(),
 
-    production && terser(),
+    production &&
+      terser({
+        mangle: {
+          reserved: ["initialize", "initializeCart"]
+        }
+      }),
 
     production &&
-    sizes({
-      details: true
-    })
+      sizes({
+        details: true
+      })
   ],
   watch: {
     clearScreen: false
