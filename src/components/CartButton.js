@@ -36,7 +36,7 @@ export default function CartButton(item) {
 
   events.on("cart", cart => root.update(cart));
 
-  root.__click = () => store.dispatch("getCart");
+  root.__click = () => store.dispatch("openCart");
 
   return root;
 }
