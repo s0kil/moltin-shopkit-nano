@@ -1,1 +1,3 @@
-export default function Checkout() {}
+export default function Checkout() {
+  return document.createTextNode("Checkout");
+}

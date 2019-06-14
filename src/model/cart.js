@@ -81,15 +81,14 @@ export default cart => {
     const { id: itemId, quantity } = item;
     const { id: cartId } = state.cart;
     try {
-      // TODO : Clean This Up
       moltinApi.debounce = true;
       const payload = await moltinApi.put(`carts/${cartId}/items/${itemId}`, {
         type: "cart_item",
         itemId,
         quantity
       });
-
       moltinApi.debounce = false;
+
       cart.dispatch("setCart", payload);
     } catch (error) {
       console.log(error);

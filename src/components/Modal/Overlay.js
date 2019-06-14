@@ -1,5 +1,5 @@
 import { h as html } from "stage0";
-import styles from "stage0/styles";
+import { styles } from "stage0/styles";
 
 import { store } from "../../model";
 

@@ -1,5 +1,5 @@
 import { h as html } from "stage0";
-import styles from "stage0/styles";
+import { styles } from "stage0/styles";
 
 import { store } from "../../model";
 
@@ -7,9 +7,9 @@ import { addClass, removeClass } from "../../helpers/utils";
 
 import Header from "./Header";
 import Footer from "./Footer";
-import OrderList from "../OrderList";
-import Cart from "../Cart";
-import Checkout from "../Checkout";
+import OrderList from "../OrderList"; // orders route
+import Cart from "../Cart"; // cart route
+import Checkout from "../Checkout"; // shipping, billing route
 
 const Styles = styles({
   base: {
@@ -63,16 +63,23 @@ const View = html`
 `;
 
 export default function Modal(item = {}) {
-  const { openModal } = item;
+  const { route, open: openModal } = store.get().modal;
   const root = View;
 
-  function showModal(openModal) {
-    if (openModal) addClass(root, Styles.visible);
-    else removeClass(root, Styles.visible);
-  }
+  const header = Header({ route });
+  const footer = Footer();
+  root.prepend(header);
+  root.append(footer);
+
+  const showModal = openModal =>
+    openModal
+      ? addClass(root, Styles.visible)
+      : removeClass(root, Styles.visible);
+
   showModal(openModal);
 
   root.update = ({ openModal }) => showModal(openModal);
 
+  // root.cloneNode(true);
   return root;
 }

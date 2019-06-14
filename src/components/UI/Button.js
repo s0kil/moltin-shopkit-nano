@@ -1,5 +1,5 @@
 import { h as html } from "stage0";
-import styles from "stage0/styles";
+import { styles } from "stage0/styles";
 
 import { addClass } from "../../helpers/utils";
 import theme from "../../theme";
@@ -96,21 +96,23 @@ export default function Button(item = {}) {
     loading,
     disabled,
     marginTop,
-    noPadding
+    noPadding,
+    className
   } = item;
-  const root = View;
+  const root = View.cloneNode(true);
   const refs = View.collect(root);
   const buttonText = refs.text;
 
   root.update = text => (buttonText.nodeValue = text);
   root.update(text);
 
-  if (noPadding) addClass(root, noPadding);
+  if (className) addClass(root, className);
   if (type) addClass(root, ButtonStyle[type]);
   if (block) addClass(root, ButtonStyle.block);
   if (large) addClass(root, ButtonStyle.large);
   if (disabled) addClass(root, ButtonStyle.disabled);
   if (marginTop) addClass(root, ButtonStyle.marginTop);
+  if (noPadding) addClass(root, ButtonStyle.noPadding);
 
   if (loading) return Spinner;
   else return root;

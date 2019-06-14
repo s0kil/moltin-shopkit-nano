@@ -3,6 +3,7 @@ import sizes from "rollup-plugin-sizes";
 import replace from "rollup-plugin-replace";
 import { terser } from "rollup-plugin-terser";
 import commonjs from "rollup-plugin-commonjs";
+import minify from "rollup-plugin-babel-minify";
 import resolve from "rollup-plugin-node-resolve";
 import livereload from "rollup-plugin-livereload";
 import multiEntry from "rollup-plugin-multi-entry";
@@ -53,6 +54,11 @@ export default {
 
     production && sizeSnapshot(),
 
+    /*
+
+    */
+
+    // production && minify(),
     production &&
       terser({
         mangle: {

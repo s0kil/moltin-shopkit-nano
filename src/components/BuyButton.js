@@ -25,20 +25,20 @@ const View = html`
 
 export default function BuyButton(item) {
   const { moltinText, moltinType, moltinProductId } = item;
+  const root = View.cloneNode(true);
 
   if (moltinType !== "custom" && !moltinProductId) {
     console.warn("No product ID provided to Moltin Btn.");
     return null;
   }
 
-  View.appendChild(
+  root.appendChild(
     Button({
       text: moltinText || "Add to Cart",
       type: "primary"
     })
   );
 
-  const root = View.cloneNode(true);
   root.__click = () => addItem(item);
 
   return root;
