@@ -1,7 +1,7 @@
 import { h as html } from "stage0";
 import { styles } from "stage0/styles";
 
-import { addClass } from "../../helpers/utils";
+import { addClass, getSVG } from "../../helpers/dom";
 import theme from "../../theme";
 
 const SpinnerStyle = styles({
@@ -10,10 +10,6 @@ const SpinnerStyle = styles({
     "margin-right": "0.25rem"
   }
 });
-
-const Spinner = html`
-  <img src="spinner.svg" class=${SpinnerStyle.base} alt="Loading" />
-`;
 
 const ButtonStyle = styles({
   base: {
@@ -114,6 +110,16 @@ export default function Button(item = {}) {
   if (marginTop) addClass(root, ButtonStyle.marginTop);
   if (noPadding) addClass(root, ButtonStyle.noPadding);
 
-  if (loading) return Spinner;
-  else return root;
+  if (loading) {
+    const spinner = document.createElement("span");
+
+    getSVG("assets/spinner.svg").then(svg => {
+      spinner.innerHTML = svg;
+      addClass(spinner.firstChild, SpinnerStyle.base);
+    });
+
+    spinner.cloneNode(true);
+
+    return spinner;
+  } else return root;
 }

@@ -6,9 +6,6 @@ export const validateEmail = email => {
   return re.test(String(email).toLowerCase());
 };
 
-export const addClass = (node, _class) => node.classList.add(_class);
-export const removeClass = (node, _class) => node.classList.remove(_class);
-
 // Special Thanks To: https://gist.github.com/KoryNunn/5488215
 export function inEach(items, callback) {
   for (

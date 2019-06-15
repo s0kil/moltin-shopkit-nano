@@ -1,6 +1,7 @@
 import fastdom from "fastdom";
-import fastdomPromised from "fastdom/extensions/fastdom-promised";
+import whenDomReady from "when-dom-ready";
 import { setupSyntheticEvent } from "stage0/syntheticEvents";
+import fastdomPromised from "fastdom/extensions/fastdom-promised";
 
 import { inEach } from "./helpers/utils";
 import { MoltinClient } from "./services/moltin";
@@ -77,8 +78,4 @@ function initialize(document) {
   setupSyntheticEvent("click");
 }
 
-document.onreadystatechange = () => {
-  if (document.readyState === "complete") {
-    initialize(document);
-  }
-};
+whenDomReady().then(() => initialize(document));

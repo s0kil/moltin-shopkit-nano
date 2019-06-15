@@ -1,9 +1,16 @@
 import { h as html } from "stage0";
 
+import PoweredBy from "../PoweredBy";
+
 const View = html`
-  <div>Footer</div>
+  <div></div>
 `;
 
 export default function Footer() {
-  return View;
+  const root = View;
+
+  const poweredBy = PoweredBy();
+  root.appendChild(poweredBy);
+
+  return root;
 }

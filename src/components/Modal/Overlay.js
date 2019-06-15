@@ -3,7 +3,7 @@ import { styles } from "stage0/styles";
 
 import { store } from "../../model";
 
-import { addClass, removeClass } from "../../helpers/utils";
+import { addClass, removeClass } from "../../helpers/dom";
 
 const Styles = styles({
   base: {

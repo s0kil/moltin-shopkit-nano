@@ -36,7 +36,11 @@ export default cart => {
 
     cart.taxItems = cart.items.filter(({ type }) => type === "tax_item");
 
-    cart.averageApiRequest = timeResource("https://api.moltin.com");
+    cart.averageApiRequest = (() => {
+      const apiTime = timeResource("https://api.moltin.com");
+      if (apiTime) return apiTime;
+      else return cart.averageApiRequest;
+    })();
   });
 
   cart.on("setId", ({ cart }, cartId) => (cart.id = cartId));

@@ -3,13 +3,13 @@ import { styles } from "stage0/styles";
 
 import { store } from "../../model";
 
-import { addClass, removeClass } from "../../helpers/utils";
+import { addClass, removeClass } from "../../helpers/dom";
 
 import Header from "./Header";
 import Footer from "./Footer";
-import OrderList from "../OrderList"; // orders route
-import Cart from "../Cart"; // cart route
-import Checkout from "../Checkout"; // shipping, billing route
+import OrderList from "../OrderList";
+import Cart from "../Cart";
+import Checkout from "../Checkout";
 
 const Styles = styles({
   base: {
@@ -47,14 +47,14 @@ const Styles = styles({
   hidden: {
     opacity: 0,
     visibility: "hidden",
-    transform: "translateX(0)",
+    transform: "translateX(525px)",
     "will-change": "transform, opacity"
   },
 
   visible: {
     opacity: 1,
     visibility: "visible",
-    transform: "translateX('525px')"
+    transform: "translateX(0)"
   }
 });
 
@@ -80,6 +80,5 @@ export default function Modal(item = {}) {
 
   root.update = ({ openModal }) => showModal(openModal);
 
-  // root.cloneNode(true);
   return root;
 }

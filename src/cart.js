@@ -1,6 +1,7 @@
 import onIdle from "on-idle";
 
 import { store, events } from "./model";
+import { addClass } from "./helpers/dom";
 
 import Modal from "./components/Modal/Modal";
 import Overlay from "./components/Modal/Overlay";
@@ -12,7 +13,7 @@ function initializeCart() {
   const { open: openModal, route } = store.get().modal;
 
   const cart = document.createElement("div");
-  cart.classList.add("moltin-shopkit");
+  addClass(cart, "moltin-shopkit");
 
   const modal = Modal({ openModal });
   const modalOverlay = Overlay({ openModal });
