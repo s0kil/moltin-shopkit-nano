@@ -9,8 +9,9 @@ import Overlay from "./components/Modal/Overlay";
 let isIdle;
 function initializeCart() {
   isIdle(); // Remove Listener
+  store.dispatch("getCart");
 
-  const { open: openModal, route } = store.get().modal;
+  let { open: openModal, route } = store.get().modal;
 
   const cart = document.createElement("div");
   addClass(cart, "moltin-shopkit");
@@ -18,7 +19,8 @@ function initializeCart() {
   const modal = Modal({ openModal });
   const modalOverlay = Overlay({ openModal });
 
-  events.on("modal", ({ open: openModal }) => {
+  events.on("modal", () => {
+    ({ open: openModal } = store.get().modal);
     modal.update({ openModal });
     modalOverlay.update({ openModal });
   });

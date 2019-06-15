@@ -8,7 +8,10 @@ import cart from "./cart.js";
 import modal from "./modal.js";
 import checkout from "./checkout.js";
 
-// Special Thanks To: https://stackoverflow.com/a/37396358
+/*
+  Diff State Changes, Removing Redundant Events.
+  Special Thanks To: https://stackoverflow.com/a/37396358
+
 let oldState = {};
 function diffObject(object1, object2) {
   return Object.keys(object2).reduce((diff, key) => {
@@ -19,22 +22,13 @@ function diffObject(object1, object2) {
     };
   }, null);
 }
+*/
 
 export const events = mitt();
 const eventEmitter = function() {
   return function(store) {
     store.on("@changed", function(state) {
-      // Diff State Changes, Removing Redundant Events
-      inEach(Object.keys(state), key => {
-        if (!oldState[key]) {
-          events.emit(key, state[key]);
-          oldState[key] = state[key];
-        } else {
-          const diffStateChanges = diffObject(oldState[key], state[key]);
-          if (diffStateChanges) events.emit(key, diffStateChanges);
-          oldState[key] = state[key];
-        }
-      });
+      inEach(Object.keys(state), key => events.emit(key));
     });
   };
 };

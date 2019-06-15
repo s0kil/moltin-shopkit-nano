@@ -12,6 +12,7 @@ const View = html`
 export default function CartButton(item) {
   const { moltinText, moltinShowTotal } = item;
   let { count, subTotal } = store.get().cart;
+
   const root = View.cloneNode(true);
 
   function buttonSuffix() {
@@ -29,12 +30,12 @@ export default function CartButton(item) {
 
   root.appendChild(child);
 
-  root.update = cart => {
-    ({ count, subTotal } = cart);
+  root.update = () => {
+    ({ count, subTotal } = store.get().cart);
     child.update(buttonText());
   };
 
-  events.on("cart", cart => root.update(cart));
+  events.on("cart", () => root.update());
 
   root.__click = () => store.dispatch("openCart");
 

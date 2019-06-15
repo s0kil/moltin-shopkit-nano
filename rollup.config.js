@@ -3,12 +3,11 @@ import sizes from "rollup-plugin-sizes";
 import replace from "rollup-plugin-replace";
 import { terser } from "rollup-plugin-terser";
 import commonjs from "rollup-plugin-commonjs";
-import minify from "rollup-plugin-babel-minify";
 import resolve from "rollup-plugin-node-resolve";
 import livereload from "rollup-plugin-livereload";
 import multiEntry from "rollup-plugin-multi-entry";
-// import minifyliterals from "rollup-plugin-minifyliterals";
 import { sizeSnapshot } from "rollup-plugin-size-snapshot";
+import minifyLiterals from "rollup-plugin-minify-html-literals";
 
 const mode = process.env.NODE_ENV;
 const production = !process.env.ROLLUP_WATCH;
@@ -38,6 +37,10 @@ export default {
 
     commonjs(),
 
+    minifyLiterals({
+      failOnError: true
+    }),
+
     /*
     babel({
       exclude: "node_modules/**",
@@ -48,17 +51,10 @@ export default {
     }),
     */
 
-    // minifyliterals(),
-
     !production && livereload("dist"),
 
     production && sizeSnapshot(),
 
-    /*
-
-    */
-
-    // production && minify(),
     production &&
       terser({
         mangle: {
