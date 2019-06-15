@@ -6,9 +6,8 @@ import { addClass } from "./helpers/dom";
 import Modal from "./components/Modal/Modal";
 import Overlay from "./components/Modal/Overlay";
 
-let isIdle;
 function initializeCart() {
-  isIdle(); // Remove Listener
+  // Send OAuth Request
   store.dispatch("getCart");
 
   let { open: openModal, route } = store.get().modal;
@@ -20,8 +19,9 @@ function initializeCart() {
   const modalOverlay = Overlay({ openModal });
 
   events.on("modal", () => {
-    ({ open: openModal } = store.get().modal);
-    modal.update({ openModal });
+    ({ open: openModal, route } = store.get().modal);
+
+    modal.update({ openModal, route });
     modalOverlay.update({ openModal });
   });
 
@@ -31,5 +31,7 @@ function initializeCart() {
 }
 
 window.onload = () => {
-  isIdle = onIdle(() => initializeCart());
+  onIdle(() => {
+    initializeCart();
+  });
 };

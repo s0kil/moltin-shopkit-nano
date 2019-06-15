@@ -62,23 +62,42 @@ const View = html`
   <div class="shopkit-modal ${Styles.base} ${Styles.hidden}"></div>
 `;
 
-export default function Modal(item = {}) {
-  const { route, open: openModal } = store.get().modal;
-  const root = View;
+function renderRoute(route) {
+  console.log(route);
+  switch (route) {
+    case "login":
+      return null; // LoginForm
 
+    case "orders":
+      return OrderList();
+
+    case "shipping":
+    case "billing":
+      return Checkout();
+
+    case "cart":
+    default:
+      return Cart();
+  }
+}
+
+export default function Modal(item = {}) {
+  let { route } = store.get().modal;
+
+  const root = View;
   const header = Header({ route });
   const footer = Footer();
-  root.prepend(header);
-  root.append(footer);
 
-  const showModal = openModal =>
-    openModal
-      ? addClass(root, Styles.visible)
-      : removeClass(root, Styles.visible);
+  const showModal = open =>
+    open ? addClass(root, Styles.visible) : removeClass(root, Styles.visible);
 
-  showModal(openModal);
+  root.update = ({ openModal, route }) => {
+    showModal(openModal);
 
-  root.update = ({ openModal }) => showModal(openModal);
+    root.appendChild(header);
+    root.appendChild(renderRoute(route));
+    root.appendChild(footer);
+  };
 
   return root;
 }
