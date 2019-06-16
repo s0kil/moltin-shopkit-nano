@@ -1,6 +1,6 @@
-export let moltinApi;
-export function setApiHandler(moltinClient) {
-  moltinApi = moltinClient;
+export let moltinApi, stripeKey;
+export function setApiHandler(options) {
+  ({ client: moltinApi, stripeKey } = options);
   moltinApi.debounce = false;
 }
 

@@ -6,8 +6,8 @@ dev:
 
 prod:
 	npm run build;
-	npm run compress;
-	rm -f dist/app.js.map;
+	# npm run compress;
+	rm -f dist/*.map;
 
 start:
 	npm run start;

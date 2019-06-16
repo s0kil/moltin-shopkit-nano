@@ -1,6 +1,6 @@
 import { h as html } from "stage0";
 
-import { store, events } from "../model";
+import { connect, events } from "../model";
 import { pluralize } from "../helpers/utils";
 
 import Button from "./UI/Button";
@@ -11,17 +11,18 @@ const View = html`
 
 export default function CartButton(item) {
   const { moltinText, moltinShowTotal } = item;
-  let { count, subTotal } = store.get().cart;
+  const cart = connect("cart");
 
   const root = View.cloneNode(true);
 
-  function buttonSuffix() {
+  function buttonSuffix(subTotal, count) {
     return subTotal || count
       ? ` (${moltinShowTotal ? subTotal : pluralize(count, "item")})`
       : null;
   }
 
-  const buttonText = () => `${moltinText || "Cart"}${buttonSuffix() || ""}`;
+  const buttonText = (subTotal, count) =>
+    `${moltinText || "Cart"}${buttonSuffix(subTotal, count) || ""}`;
 
   const child = Button({
     text: buttonText(),
@@ -30,14 +31,12 @@ export default function CartButton(item) {
 
   root.appendChild(child);
 
-  root.update = () => {
-    ({ count, subTotal } = store.get().cart);
-    child.update(buttonText());
-  };
+  root.update = ({ count, subTotal }) =>
+    child.update(buttonText(subTotal, count));
 
-  events.on("cart", () => root.update());
+  events.on("cart", cart => root.update(cart));
 
-  root.__click = () => store.dispatch("openCart");
+  root.__click = () => cart.dispatch("openCart");
 
   return root;
 }

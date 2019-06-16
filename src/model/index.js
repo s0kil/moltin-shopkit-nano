@@ -1,6 +1,6 @@
 import mitt from "mitt";
-import createStore from "storeon";
 import persistState from "@storeon/localstorage";
+import { createSvelteStore } from "@storeon/svelte";
 
 import { inEach } from "../helpers/utils";
 
@@ -28,12 +28,12 @@ export const events = mitt();
 const eventEmitter = function() {
   return function(store) {
     store.on("@changed", function(state) {
-      inEach(Object.keys(state), key => events.emit(key));
+      inEach(Object.keys(state), key => events.emit(key, state[key]));
     });
   };
 };
 
-export const store = createStore([
+export const connect = createSvelteStore([
   cart,
   modal,
   checkout,

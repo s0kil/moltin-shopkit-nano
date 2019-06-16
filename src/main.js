@@ -48,7 +48,10 @@ function initialize(document) {
       application: "moltin-btn",
       ...(moltinCurrency && { moltinCurrency })
     });
-    setApiHandler(moltinClient);
+    setApiHandler({
+      client: moltinClient,
+      stripeKey: moltinStripePublishableKey
+    });
   });
 
   let buyButtons;

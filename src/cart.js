@@ -1,37 +1,27 @@
 import onIdle from "on-idle";
 
-import { store, events } from "./model";
-import { addClass } from "./helpers/dom";
+import { connect } from "./model";
+import { stripeKey } from "./helpers/api";
 
-import Modal from "./components/Modal/Modal";
-import Overlay from "./components/Modal/Overlay";
+import "./components/Theme.svelte";
+import Modal from "./components/Modal/Modal.svelte";
 
 function initializeCart() {
+  const cart = connect("cart");
+
   // Send OAuth Request
-  store.dispatch("getCart");
+  cart.dispatch("getCart");
 
-  let { open: openModal, route } = store.get().modal;
+  const modal = document.createElement("div");
+  modal.id = "moltin-shopkit";
+  document.body.appendChild(modal);
 
-  const cart = document.createElement("div");
-  addClass(cart, "moltin-shopkit");
-
-  const modal = Modal({ openModal });
-  const modalOverlay = Overlay({ openModal });
-
-  events.on("modal", () => {
-    ({ open: openModal, route } = store.get().modal);
-
-    modal.update({ openModal, route });
-    modalOverlay.update({ openModal });
+  new Modal({
+    target: document.getElementById("moltin-shopkit"),
+    props: {
+      stripeKey
+    }
   });
-
-  cart.appendChild(modal);
-  cart.appendChild(modalOverlay);
-  document.body.appendChild(cart);
 }
 
-window.onload = () => {
-  onIdle(() => {
-    initializeCart();
-  });
-};
+window.onload = () => onIdle(() => initializeCart());

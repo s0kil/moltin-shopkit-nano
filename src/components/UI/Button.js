@@ -1,15 +1,8 @@
 import { h as html } from "stage0";
 import { styles } from "stage0/styles";
 
-import { addClass, getSVG } from "../../helpers/dom";
+import { addClass } from "../../helpers/dom";
 import theme from "../../theme";
-
-const SpinnerStyle = styles({
-  base: {
-    display: "inline",
-    "margin-right": "0.25rem"
-  }
-});
 
 const ButtonStyle = styles({
   base: {
@@ -48,34 +41,6 @@ const ButtonStyle = styles({
     display: "inline-flex",
     "align-items": "center",
     "justify-content": "center"
-  },
-  text: {
-    color: theme.dark,
-    "font-weight": 500,
-    "font-size": `${theme.textSmall} !important`,
-    "text-decoration": "underline",
-    padding: 0,
-    ":hover": {
-      color: theme.primary
-    }
-  },
-  noPadding: {
-    padding: 0
-  },
-  disabled: {
-    opacity: 0.5,
-    ":hover": {
-      cursor: "not-allowed"
-    }
-  },
-  block: {
-    width: "100%"
-  },
-  marginTop: {
-    "margin-top": "1.5rem"
-  },
-  large: {
-    height: "3.25rem"
   }
 });
 
@@ -84,42 +49,15 @@ const View = html`
 `;
 
 export default function Button(item = {}) {
-  const {
-    text,
-    type,
-    block,
-    large,
-    loading,
-    disabled,
-    marginTop,
-    noPadding,
-    className
-  } = item;
+  const { text, type } = item;
   const root = View.cloneNode(true);
   const refs = View.collect(root);
   const buttonText = refs.text;
 
+  if (type) addClass(root, ButtonStyle[type]);
+
   root.update = text => (buttonText.nodeValue = text);
   root.update(text);
 
-  if (className) addClass(root, className);
-  if (type) addClass(root, ButtonStyle[type]);
-  if (block) addClass(root, ButtonStyle.block);
-  if (large) addClass(root, ButtonStyle.large);
-  if (disabled) addClass(root, ButtonStyle.disabled);
-  if (marginTop) addClass(root, ButtonStyle.marginTop);
-  if (noPadding) addClass(root, ButtonStyle.noPadding);
-
-  if (loading) {
-    const spinner = document.createElement("span");
-
-    getSVG("assets/spinner.svg").then(svg => {
-      spinner.innerHTML = svg;
-      addClass(spinner.firstChild, SpinnerStyle.base);
-    });
-
-    spinner.cloneNode(true);
-
-    return spinner;
-  } else return root;
+  return root;
 }

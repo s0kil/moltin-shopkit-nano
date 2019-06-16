@@ -1,13 +1,15 @@
 import { h as html } from "stage0";
 
-import { store } from "../model";
+import { connect } from "../model";
 
 import Button from "./UI/Button";
 
+const cart = connect("cart");
+
 function addItem(item) {
   item.moltinType !== "custom"
-    ? store.dispatch("addItem", { id: item.moltinProductId })
-    : store.dispatch("addItem", {
+    ? cart.dispatch("addItem", { id: item.moltinProductId })
+    : cart.dispatch("addItem", {
         type: "custom_item",
         name: item.moltinProductName,
         sku: item.moltinProductSku,
@@ -16,7 +18,7 @@ function addItem(item) {
         }
       });
 
-  item.moltinOpenCart && store.dispatch("goToCart");
+  item.moltinOpenCart && cart.dispatch("goToCart");
 }
 
 const View = html`
