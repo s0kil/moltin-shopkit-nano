@@ -8,12 +8,11 @@ export default cart => {
     cart: {
       id: createCartIdentifier(),
       meta: null,
-      items: [],
-      loading: true
+      items: []
     }
   }));
 
-  // cart.on("@dispatch", (state, [event, data]) => {});
+  cart.on("@dispatch", (state, [event, data]) => {});
 
   cart.on("@changed", ({ cart }) => {
     cart.loading = false;
@@ -85,13 +84,13 @@ export default cart => {
     const { id: itemId, quantity } = item;
     const { id: cartId } = state.cart;
     try {
-      moltinApi.debounce = true;
+      // moltinApi.debounce = true;
       const payload = await moltinApi.put(`carts/${cartId}/items/${itemId}`, {
         type: "cart_item",
         itemId,
         quantity
       });
-      moltinApi.debounce = false;
+      // moltinApi.debounce = false;
 
       cart.dispatch("setCart", payload);
     } catch (error) {

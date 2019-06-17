@@ -1,8 +1,8 @@
 {
   "dist/app.js": {
-    "bundled": 153949,
-    "minified": 63905,
-    "gzipped": 21565
+    "bundled": 152917,
+    "minified": 63252,
+    "gzipped": 21337
   },
   "dist/cart.js": {
     "bundled": 13643,

@@ -71,9 +71,7 @@ function initialize(document) {
   }).then(() => {
     inEach(cartButtons, cartButton => {
       FastDom.mutate(() =>
-        cartButton.appendChild(
-          CartButton({ loading: true, ...cartButton.dataset })
-        )
+        cartButton.appendChild(CartButton({ ...cartButton.dataset }))
       );
     });
   });

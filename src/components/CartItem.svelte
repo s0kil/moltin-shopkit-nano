@@ -13,8 +13,15 @@
   export let updateItem;
   export let removeFromCart;
   export let averageApiRequest;
+  export let optimizeImage = true;
 
-  const { href } = image;
+  const { href: imageHref } = image;
+  // TODO : Check If Client Supports WebP Format
+  // https://images.weserv.nl/
+  const href = optimizeImage
+    ? `https://images.weserv.nl/?url=${imageHref}&w=75&h=75&output=webp&il`
+    : imageHref;
+
   const {
     display_price: {
       without_tax: {
@@ -103,10 +110,10 @@
 <div
   class:disabled
   class="wrapper"
-  out:slide={{ duration: averageApiRequest || 300 }}>
+  out:slide={{ duration: averageApiRequest <= 1000 ? averageApiRequest : 300 }}>
 
   <div class="photo-box">
-    {#if href}
+    {#if href && imageHref}
       <img src={href} title={name} alt={name} />
     {:else}
       <ShopkitIcon />
