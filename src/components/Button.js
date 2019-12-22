@@ -1,8 +1,8 @@
-import { h as html } from "stage0";
-import { styles } from "stage0/styles";
+import {h as html} from "stage0";
+import {styles} from "stage0/styles";
 
-import { addClass } from "../../helpers/dom";
-import theme from "../../theme";
+import {addClass} from "../helpers/dom";
+import theme from "./Theme";
 
 const ButtonStyle = styles({
   base: {
@@ -49,7 +49,7 @@ const View = html`
 `;
 
 export default function Button(item = {}) {
-  const { text, type } = item;
+  const {text, type} = item;
   const root = View.cloneNode(true);
   const refs = View.collect(root);
   const buttonText = refs.text;

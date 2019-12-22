@@ -59,26 +59,22 @@ function initialize(document) {
   FastDom.measure(() => {
     buyButtons = [...document.getElementsByClassName("moltin-buy-button")];
   }).then(() => {
-    console.time("buyButtonsInitialized");
     inEach(buyButtons, buyButton => {
       FastDom.mutate(() =>
         buyButton.appendChild(BuyButton({...buyButton.dataset}))
       );
     });
-    console.timeEnd("buyButtonsInitialized");
   });
 
   let cartButtons;
   FastDom.measure(() => {
     cartButtons = [...document.getElementsByClassName("moltin-cart-button")];
   }).then(() => {
-    console.time("cartButtonsInitialized");
     inEach(cartButtons, cartButton => {
       FastDom.mutate(() =>
         cartButton.appendChild(CartButton({...cartButton.dataset}))
       );
     });
-    console.timeEnd("cartButtonsInitialized");
   });
 
   setupSyntheticEvent("click");

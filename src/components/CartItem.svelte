@@ -1,5 +1,5 @@
 <script>
-  import { slide } from "svelte/transition";
+  import {slide} from "svelte/transition";
 
   import Button from "./Button.svelte";
   import ShopkitIcon from "./ShopkitIcon.svelte";
@@ -13,19 +13,13 @@
   export let updateItem;
   export let removeFromCart;
   export let averageApiRequest;
-  export let optimizeImage = true;
 
-  const { href: imageHref } = image;
-  // TODO : Check If Client Supports WebP Format
-  // https://images.weserv.nl/
-  const href = optimizeImage
-    ? `https://images.weserv.nl/?url=${imageHref}&w=75&h=75&output=webp&il`
-    : imageHref;
+  const {href: imageHref} = image;
 
   const {
     display_price: {
       without_tax: {
-        unit: { formatted: unit }
+        unit: {formatted: unit}
       }
     }
   } = meta;
@@ -102,22 +96,23 @@
   .disabled {
     opacity: 0.5;
   }
+
   .disabled:hover {
     cursor: not-allowed;
   }
 </style>
 
 <div
-  class:disabled
-  class="wrapper"
-  out:slide={{ duration: averageApiRequest <= 1000 ? averageApiRequest : 300 }}>
+    class:disabled
+    class="wrapper"
+    out:slide={{ duration: averageApiRequest <= 1000 ? averageApiRequest : 300 }}>
 
   <div class="photo-box">
-    {#if href && imageHref}
-      <img src={href} title={name} alt={name} />
-    {:else}
-      <ShopkitIcon />
-    {/if}
+      {#if imageHref}
+        <img src={imageHref} title={name} alt={name}/>
+      {:else}
+        <ShopkitIcon/>
+      {/if}
   </div>
 
   <div class="info">
@@ -125,18 +120,18 @@
     <p class="product-price">{unit}</p>
 
     <Button
-      buttonStyle="cart"
-      buttonType="text"
-      noPadding={true}
-      {disabled}
-      on:click={handleRemove}>
+        buttonStyle="cart"
+        buttonType="text"
+        noPadding={true}
+        {disabled}
+        on:click={handleRemove}>
       Remove
     </Button>
 
   </div>
 
   <div class="extra">
-    <QuantityStepper itemId={id} {quantity} updateItem={handleQuantityChange} />
+    <QuantityStepper itemId={id} {quantity} updateItem={handleQuantityChange}/>
   </div>
 
 </div>

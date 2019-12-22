@@ -1,5 +1,5 @@
 <script>
-  import { connect } from "../model";
+  import {connect} from "../model";
 
   import CartItem from "./CartItem.svelte";
   import PromotionManager from "./PromotionManager/PromotionManager.svelte";
@@ -30,18 +30,18 @@
 </style>
 
 <div class="wrapper">
-  {#each items as item (item.id)}
-    <CartItem
-      key={item.id}
-      removeFromCart={removeItem}
-      {updateItem}
-      averageApiRequest={$cart.averageApiRequest}
-      {...item} />
-  {/each}
+    {#each items as item (item.id)}
+      <CartItem
+          key={item.id}
+          removeFromCart={removeItem}
+          {updateItem}
+          averageApiRequest={$cart.averageApiRequest}
+          {...item}/>
+    {/each}
 </div>
 
 <PromotionManager
-  error={$cart.error}
-  {addPromotion}
-  {promotionItems}
-  removePromotion={removeItem} />
+    error={$cart.error}
+    {addPromotion}
+    {promotionItems}
+    removePromotion={removeItem}/>

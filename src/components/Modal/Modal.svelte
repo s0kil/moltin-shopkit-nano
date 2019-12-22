@@ -25,9 +25,8 @@
       case "login":
         return LoginForm;
 
-      case "orders": {
+      case "orders":
         return OrderList;
-      }
 
       case "shipping":
       case "billing":
@@ -112,7 +111,8 @@
   <div
       class="modal-overlay"
       on:click={handleCloseEvent}
-      transition:fade={{ duration: averageApiRequest || 300 }}></div>
+      transition:fade={{ duration: averageApiRequest || 300 }}>
+  </div>
 
   <div
       class="modal"

@@ -3,7 +3,7 @@ import {h as html} from "stage0";
 import {connect, events} from "../model";
 import {pluralize} from "../helpers/utils";
 
-import Button from "./UI/Button";
+import Button from "./Button";
 
 const View = html`
   <span class="shopkit-cart-button"></span>

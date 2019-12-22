@@ -1,22 +1,22 @@
-import { h as html } from "stage0";
+import {h as html} from "stage0";
 
-import { connect } from "../model";
+import {connect} from "../model";
 
-import Button from "./UI/Button";
+import Button from "./Button";
 
 const cart = connect("cart");
 
 function addItem(item) {
   item.moltinType !== "custom"
-    ? cart.dispatch("addItem", { id: item.moltinProductId })
+    ? cart.dispatch("addItem", {id: item.moltinProductId})
     : cart.dispatch("addItem", {
-        type: "custom_item",
-        name: item.moltinProductName,
-        sku: item.moltinProductSku,
-        price: {
-          amount: parseInt(item.moltinProductPrice, 10)
-        }
-      });
+      type: "custom_item",
+      name: item.moltinProductName,
+      sku: item.moltinProductSku,
+      price: {
+        amount: parseInt(item.moltinProductPrice, 10)
+      }
+    });
 
   item.moltinOpenCart && cart.dispatch("goToCart");
 }
@@ -26,7 +26,7 @@ const View = html`
 `;
 
 export default function BuyButton(item) {
-  const { moltinText, moltinType, moltinProductId } = item;
+  const {moltinText, moltinType, moltinProductId} = item;
   const root = View.cloneNode(true);
 
   if (moltinType !== "custom" && !moltinProductId) {
