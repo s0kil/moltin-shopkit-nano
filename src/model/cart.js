@@ -1,7 +1,7 @@
-import { createCartIdentifier } from "../services/moltin";
+import {createCartIdentifier} from "../services/moltin";
 
-import { moltinApi } from "../helpers/api.js";
-import { timeResource } from "../helpers/resourcePerformance.js";
+import {moltinApi} from "../helpers/api.js";
+import {timeResource} from "../helpers/resourcePerformance.js";
 
 export default cart => {
   cart.on("@init", () => ({
@@ -12,28 +12,29 @@ export default cart => {
     }
   }));
 
-  cart.on("@dispatch", (state, [event, data]) => {});
+  cart.on("@dispatch", (state, [event, data]) => {
+  });
 
-  cart.on("@changed", ({ cart }) => {
+  cart.on("@changed", ({cart}) => {
     cart.loading = false;
 
     cart.isEmpty = cart.items.length === 0;
 
-    cart.count = cart.items.reduce((sum, { quantity }) => sum + quantity, 0);
+    cart.count = cart.items.reduce((sum, {quantity}) => sum + quantity, 0);
 
     cart.subTotal = cart.meta
       ? cart.meta.display_price.without_tax.formatted
       : 0;
 
     cart.items = cart.items.filter(
-      ({ type }) => type === "cart_item" || type === "custom_item"
+      ({type}) => type === "cart_item" || type === "custom_item"
     );
 
     cart.promotionItems = cart.items.filter(
-      ({ type }) => type === "promotion_item"
+      ({type}) => type === "promotion_item"
     );
 
-    cart.taxItems = cart.items.filter(({ type }) => type === "tax_item");
+    cart.taxItems = cart.items.filter(({type}) => type === "tax_item");
 
     cart.averageApiRequest = (() => {
       const apiTime = timeResource("https://api.moltin.com");
@@ -42,9 +43,9 @@ export default cart => {
     })();
   });
 
-  cart.on("setId", ({ cart }, cartId) => (cart.id = cartId));
+  cart.on("setId", ({cart}, cartId) => (cart.id = cartId));
 
-  cart.on("setCart", ({ cart }, { data, meta }) => {
+  cart.on("setCart", ({cart}, {data, meta}) => {
     return {
       cart: {
         ...cart,
@@ -70,7 +71,7 @@ export default cart => {
 
   cart.on(
     "addItem",
-    async (state, { quantity = 1, type = "cart_item", ...item }) => {
+    async (state, {quantity = 1, type = "cart_item", ...item}) => {
       const payload = await moltinApi.post(`carts/${state.cart.id}/items`, {
         type,
         quantity,
@@ -81,8 +82,8 @@ export default cart => {
   );
 
   cart.on("updateItem", async (state, item) => {
-    const { id: itemId, quantity } = item;
-    const { id: cartId } = state.cart;
+    const {id: itemId, quantity} = item;
+    const {id: cartId} = state.cart;
     try {
       // moltinApi.debounce = true;
       const payload = await moltinApi.put(`carts/${cartId}/items/${itemId}`, {
@@ -99,13 +100,13 @@ export default cart => {
   });
 
   cart.on("removeItem", async (state, itemId) => {
-    const { id: cartId } = state.cart;
+    const {id: cartId} = state.cart;
     const payload = await moltinApi.delete(`carts/${cartId}/items/${itemId}`);
     cart.dispatch("setCart", payload);
   });
 
   cart.on("addPromotion", async (state, promotionCode) => {
-    const { id: cartId } = state.cart;
+    const {id: cartId} = state.cart;
 
     try {
       const payload = await moltinApi.post(`carts/${cartId}/items`, {
@@ -114,7 +115,7 @@ export default cart => {
       });
 
       cart.dispatch("setCart", payload);
-    } catch ({ statusCode }) {
+    } catch ({statusCode}) {
       console.log("Code expired or invalid");
     } finally {
       return {

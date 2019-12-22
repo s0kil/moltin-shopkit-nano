@@ -1,3 +1,5 @@
+import loadAsset from "loadjs";
+
 export default modal => {
   modal.on("@init", () => ({
     modal: {
@@ -6,11 +8,11 @@ export default modal => {
     }
   }));
 
-  modal.on("@changed", ({ modal }) => {
+  modal.on("@changed", ({modal}) => {
     modal.checkingOut = ["shipping", "billing"].includes(modal.route);
   });
 
-  modal.on("changeRoute", ({ modal }, route) => {
+  modal.on("changeRoute", ({modal}, route) => {
     return {
       modal: {
         route: route,
@@ -28,9 +30,9 @@ export default modal => {
     modal.dispatch("changeRoute", "confirmation")
   );
 
-  modal.on("toggle", ({ modal }) => (modal.open = !modal.open));
+  modal.on("toggle", ({modal}) => (modal.open = !modal.open));
 
-  modal.on("openCart", ({ modal }) => {
+  modal.on("openCart", ({modal}) => {
     return {
       modal: {
         open: true,
@@ -40,15 +42,15 @@ export default modal => {
   });
 
   modal.on("closeModal", state => {
-    const { checkingOut } = state.modal;
-    const { completed } = state.checkout;
+    const {checkingOut} = state.modal;
+    const {completed} = state.checkout;
 
     if (!completed && checkingOut) return;
 
     modal.dispatch("close");
   });
 
-  modal.on("close", ({ modal }) => {
+  modal.on("close", ({modal}) => {
     return {
       modal: {
         open: false
@@ -56,12 +58,30 @@ export default modal => {
     };
   });
 
-  modal.on("continueShopping", ({ modal }) => {
+  modal.on("continueShopping", ({modal}) => {
     return {
       modal: {
         open: false,
         route: "cart"
       }
     };
+  });
+
+  modal.on("loadStripe", ({modal}, stripeKey) => {
+    if (!loadAsset.isDefined("stripe")) {
+      loadAsset(["https://js.stripe.com/v3"], "stripe", {
+        numRetries: 3
+      });
+
+      loadAsset.ready("stripe", {
+        success: () => {
+          Stripe(stripeKey);
+        },
+        error: () => {
+          console.error("Stripe Failed To Load");
+          return null;
+        }
+      });
+    }
   });
 };

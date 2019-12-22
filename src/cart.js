@@ -1,7 +1,7 @@
 import onIdle from "on-idle";
 
-import { connect } from "./model";
-import { stripeKey } from "./helpers/api";
+import {connect} from "./model";
+import {stripeKey} from "./helpers/api";
 
 import "./components/Theme.svelte";
 import Modal from "./components/Modal/Modal.svelte";
@@ -9,7 +9,7 @@ import Modal from "./components/Modal/Modal.svelte";
 function initializeCart() {
   const cart = connect("cart");
 
-  // Send OAuth Request
+  // Restore Cart Session
   cart.dispatch("getCart");
 
   const modal = document.createElement("div");

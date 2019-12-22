@@ -1,12 +1,12 @@
 // import babel from "rollup-plugin-babel";
 import svelte from "rollup-plugin-svelte";
-import replace from "rollup-plugin-replace";
-import { terser } from "rollup-plugin-terser";
+import replace from "@rollup/plugin-replace";
+import {terser} from "rollup-plugin-terser";
 import commonjs from "rollup-plugin-commonjs";
 import resolve from "rollup-plugin-node-resolve";
-import livereload from "rollup-plugin-livereload";
-import multiEntry from "rollup-plugin-multi-entry";
-import { sizeSnapshot } from "rollup-plugin-size-snapshot";
+import liveReload from "rollup-plugin-livereload";
+import multiEntry from "@rollup/plugin-multi-entry";
+import {sizeSnapshot} from "rollup-plugin-size-snapshot";
 import minifyLiterals from "rollup-plugin-minify-html-literals";
 
 const mode = process.env.NODE_ENV;
@@ -57,15 +57,15 @@ export default {
       }),
       */
 
-    !production && livereload("dist"),
+    !production && liveReload("dist"),
 
     production && sizeSnapshot(),
     production &&
-      terser({
-        mangle: {
-          reserved: ["initialize", "initializeCart"]
-        }
-      })
+    terser({
+      mangle: {
+        reserved: ["initialize", "initializeCart"]
+      }
+    })
   ],
   watch: {
     clearScreen: false

@@ -1,4 +1,4 @@
-import { removeLeadingSlash } from "./utilities";
+import {removeLeadingSlash} from "./utilities";
 
 export default async function requestHandler(
   method,
@@ -44,15 +44,15 @@ export default async function requestHandler(
     "Content-Type": "application/json",
     "X-MOLTIN-SDK-LANGUAGE": "JS-REQUEST",
     Authorization: `Bearer ${access_token}`,
-    ...(application && { "X-MOLTIN-APPLICATION": application }),
-    ...(currency && { "X-MOLTIN-CURRENCY": currency }),
-    ...(customer_token && { "X-MOLTIN-CUSTOMER-TOKEN": customer_token }),
+    ...(application && {"X-MOLTIN-APPLICATION": application}),
+    ...(currency && {"X-MOLTIN-CURRENCY": currency}),
+    ...(customer_token && {"X-MOLTIN-CUSTOMER-TOKEN": customer_token}),
     ...customHeaders
   };
 
   const body = customHeaders["Content-Type"]
     ? data
-    : { body: JSON.stringify({ data }) };
+    : {body: JSON.stringify({data})};
 
   const response = await this.fetch(uri, {
     method,

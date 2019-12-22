@@ -1,7 +1,7 @@
-import { h as html } from "stage0";
+import {h as html} from "stage0";
 
-import { connect, events } from "../model";
-import { pluralize } from "../helpers/utils";
+import {connect, events} from "../model";
+import {pluralize} from "../helpers/utils";
 
 import Button from "./UI/Button";
 
@@ -10,7 +10,7 @@ const View = html`
 `;
 
 export default function CartButton(item) {
-  const { moltinText, moltinShowTotal } = item;
+  const {moltinText, moltinShowTotal} = item;
   const cart = connect("cart");
 
   const root = View.cloneNode(true);
@@ -31,7 +31,7 @@ export default function CartButton(item) {
 
   root.appendChild(child);
 
-  root.update = ({ count, subTotal }) =>
+  root.update = ({count, subTotal}) =>
     child.update(buttonText(subTotal, count));
 
   events.on("cart", cart => root.update(cart));

@@ -1,9 +1,8 @@
 <script>
-  import { onMount } from "svelte";
-  import loadAsset from "loadjs";
-  import { fade, fly } from "svelte/transition";
+  import {onMount} from "svelte";
+  import {fade, fly} from "svelte/transition";
 
-  import { connect } from "../../model";
+  import {connect} from "../../model";
 
   import Header from "./Header.svelte";
   import Footer from "./Footer.svelte";
@@ -13,8 +12,6 @@
   import Checkout from "../Checkout.svelte";
 
   export let stripeKey;
-
-  let stripe;
 
   const modal = connect("modal");
   const cart = connect("cart");
@@ -34,6 +31,7 @@
 
       case "shipping":
       case "billing":
+        modal.dispatch("loadStripe", stripeKey);
         return Checkout;
 
       case "cart":
@@ -47,22 +45,6 @@
       modal.dispatch("closeModal");
     }
   }
-
-  onMount(() => {
-    loadAsset(["https://js.stripe.com/v3"], "stripe", {
-      numRetries: 3
-    });
-
-    loadAsset.ready("stripe", {
-      success: () => {
-        stripe = Stripe(stripeKey);
-      },
-      error: () => {
-        console.error("Stripe failed to load");
-        return null;
-      }
-    });
-  });
 </script>
 
 <style>
@@ -96,7 +78,7 @@
     -webkit-text-size-adjust: 100%;
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-      Helvetica Neue, Arial, Noto Sans, sans-serif;
+    Helvetica Neue, Arial, Noto Sans, sans-serif;
     font-size: 15px;
     will-change: transform, opacity;
   }
@@ -107,6 +89,7 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
   .modal::-webkit-scrollbar {
     width: 0 !important;
   }
@@ -127,20 +110,20 @@
 
 {#if open}
   <div
-    class="modal-overlay"
-    on:click={handleCloseEvent}
-    transition:fade={{ duration: averageApiRequest || 300 }} />
+      class="modal-overlay"
+      on:click={handleCloseEvent}
+      transition:fade={{ duration: averageApiRequest || 300 }}></div>
 
   <div
-    class="modal"
-    transition:fly={{ duration: averageApiRequest || 300, x: 525, y: 0 }}>
+      class="modal"
+      transition:fly={{ duration: averageApiRequest || 300, x: 525, y: 0 }}>
 
     <div>
-      <Header {route} />
-      <svelte:component this={currentRoute(route)} />
+      <Header {route}/>
+      <svelte:component this={currentRoute(route)}/>
     </div>
 
-    <Footer />
+    <Footer/>
 
   </div>
 {/if}

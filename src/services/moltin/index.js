@@ -2,10 +2,10 @@ import storageAdapter from "./storage";
 import authenticator from "./authenticator";
 import requestHandler from "./request";
 
-export { createCartIdentifier } from "./utilities";
+export {createCartIdentifier} from "./utilities";
 
 export function MoltinClient(options) {
-  const { client_id, client_secret, storage, ...others } = options;
+  const {client_id, client_secret, storage, ...others} = options;
 
   this.client_id = client_id;
   this.client_secret = client_secret ? client_secret : undefined;
@@ -22,18 +22,18 @@ MoltinClient.prototype.authenticate = authenticator;
 
 MoltinClient.prototype.request = requestHandler;
 
-MoltinClient.prototype.get = function(path, headers) {
+MoltinClient.prototype.get = function (path, headers) {
   return this.request("GET", path, undefined, headers);
 };
 
-MoltinClient.prototype.put = function(path, data, headers) {
+MoltinClient.prototype.put = function (path, data, headers) {
   return this.request("PUT", path, data, headers);
 };
 
-MoltinClient.prototype.post = function(path, data, headers) {
+MoltinClient.prototype.post = function (path, data, headers) {
   return this.request("POST", path, data, headers);
 };
 
-MoltinClient.prototype.delete = function(path, data, headers) {
+MoltinClient.prototype.delete = function (path, data, headers) {
   return this.request("DELETE", path, data, headers);
 };

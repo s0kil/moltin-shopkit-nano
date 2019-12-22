@@ -12,10 +12,10 @@ export function timeResource(resource) {
     }
   }
 
-  const resourceTimingsAverage = resourceTimings.length
+  // const resourceTimingsMax = Math.max(...resourceTimings);
+
+  // Average Resource Timings
+  return resourceTimings.length
     ? resourceTimings.reduce((a, b) => a + b, 0) / resourceTimings.length
     : null;
-
-  // const resourceTimingsMax = Math.max(...resourceTimings);
-  return resourceTimingsAverage;
 }

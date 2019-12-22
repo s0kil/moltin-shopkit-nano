@@ -1,16 +1,16 @@
-import fastdom from "fastdom";
+import fastDom from "fastdom";
 import whenDomReady from "when-dom-ready";
-import { setupSyntheticEvent } from "stage0/syntheticEvents";
-import fastdomPromised from "fastdom/extensions/fastdom-promised";
-
-import { inEach } from "./helpers/utils";
-import { MoltinClient } from "./services/moltin";
-import { setApiHandler, fetchController } from "./helpers/api";
+import {setupSyntheticEvent} from "stage0/syntheticEvents";
+import fastDomPromised from "fastdom/extensions/fastdom-promised";
+import speculative from "speculative";
+import {inEach} from "./helpers/utils";
+import {MoltinClient} from "./services/moltin";
+import {fetchController, setApiHandler} from "./helpers/api";
 
 import BuyButton from "./components/BuyButton";
 import CartButton from "./components/CartButton";
 
-const FastDom = fastdom.extend(fastdomPromised);
+const FastDom = fastDom.extend(fastDomPromised);
 
 function initialize(document) {
   let script,
@@ -46,7 +46,7 @@ function initialize(document) {
       fetch: fetchController,
       client_id: moltinClientId,
       application: "moltin-btn",
-      ...(moltinCurrency && { moltinCurrency })
+      ...(moltinCurrency && {moltinCurrency})
     });
     setApiHandler({
       client: moltinClient,
@@ -58,25 +58,40 @@ function initialize(document) {
   FastDom.measure(() => {
     buyButtons = [...document.getElementsByClassName("moltin-buy-button")];
   }).then(() => {
+    console.time("buyButtonsInitialized");
     inEach(buyButtons, buyButton => {
       FastDom.mutate(() =>
-        buyButton.appendChild(BuyButton({ ...buyButton.dataset }))
+        buyButton.appendChild(BuyButton({...buyButton.dataset}))
       );
     });
+    console.timeEnd("buyButtonsInitialized");
   });
 
   let cartButtons;
   FastDom.measure(() => {
     cartButtons = [...document.getElementsByClassName("moltin-cart-button")];
   }).then(() => {
+    console.time("cartButtonsInitialized");
     inEach(cartButtons, cartButton => {
       FastDom.mutate(() =>
-        cartButton.appendChild(CartButton({ ...cartButton.dataset }))
+        cartButton.appendChild(CartButton({...cartButton.dataset}))
       );
     });
+    console.timeEnd("cartButtonsInitialized");
   });
 
   setupSyntheticEvent("click");
+
+  const moltinAPIURL = "https://api.moltin.com";
+  speculative({
+    rel: "dns-prefetch",
+    href: moltinAPIURL
+  });
+  speculative({
+    rel: "preconnect",
+    crossorigin: "anonymous",
+    href: moltinAPIURL
+  });
 }
 
 whenDomReady().then(() => initialize(document));

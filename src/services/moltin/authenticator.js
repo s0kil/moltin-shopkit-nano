@@ -3,7 +3,7 @@ export default async function authenticator() {
     client_id,
     client_secret,
     storage,
-    options: { host }
+    options: {host}
   } = this;
 
   if (!client_id) {
@@ -15,7 +15,7 @@ export default async function authenticator() {
   const body = {
     grant_type: client_secret ? "client_credentials" : "implicit",
     client_id,
-    ...(client_secret && { client_secret })
+    ...(client_secret && {client_secret})
   };
 
   const response = await this.fetch(uri, {
@@ -29,7 +29,7 @@ export default async function authenticator() {
       .join("&")
   });
 
-  const { access_token, expires } = await response.json();
+  const {access_token, expires} = await response.json();
 
   if (!access_token) {
     throw new Error("Unable to obtain an access token");
