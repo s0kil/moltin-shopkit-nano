@@ -1,4 +1,3 @@
-// import babel from "rollup-plugin-babel";
 import svelte from "rollup-plugin-svelte";
 import replace from "@rollup/plugin-replace";
 import {terser} from "rollup-plugin-terser";
@@ -15,9 +14,8 @@ const production = !process.env.ROLLUP_WATCH;
 export default {
   input: ["src/main.js", "src/cart.js"],
   output: {
-    file: "dist/app.js",
+    file: "dist/moltin-shopkit.js",
     format: "iife",
-    name: "MoltinShopkitFemto",
     sourcemap: !production
   },
 
@@ -39,7 +37,7 @@ export default {
     svelte({
       dev: !production,
       css: css => {
-        css.write("dist/bundle.css", !production);
+        css.write("dist/moltin-shopkit.css", !production);
       }
     }),
 
@@ -47,21 +45,15 @@ export default {
       failOnError: true
     }),
 
-    /*
-      babel({
-        exclude: "node_modules/**",
-        presets: [["@babel/preset-env"]],
-        plugins: [],
-        runtimeHelpers: true,
-        babelrc: false
-      }),
-      */
-
     !production && liveReload("dist"),
 
     production && sizeSnapshot(),
     production &&
     terser({
+      compress: {
+        passes: 3,
+        unsafe: true,
+      },
       mangle: {
         reserved: ["initialize", "initializeCart"]
       }

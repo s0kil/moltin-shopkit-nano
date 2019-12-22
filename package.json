@@ -13,8 +13,8 @@
     "start:dev": "sirv --dev --host=0.0.0.0 --port=8000 dist",
     "start:test": "browser-sync start --server 'public' --host=0.0.0.0 --port 8000 --https --no-open --no-ui",
     "compress": "run-p compress:gzip compress:brotli",
-    "compress:gzip": "gzip --best --keep --force -- dist/app.js",
-    "compress:brotli": "brotli --best --keep --force -- dist/app.js"
+    "compress:gzip": "gzip --best --keep --force -- dist/*.js dist/*.css",
+    "compress:brotli": "brotli --best --keep --force -- dist/*.js dist/*.css"
   },
   "author": "s0kil",
   "license": "MIT",

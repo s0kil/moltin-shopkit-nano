@@ -8,5 +8,10 @@
     "bundled": 13643,
     "minified": 4939,
     "gzipped": 1895
+  },
+  "dist/moltin-shopkit.js": {
+    "bundled": 156154,
+    "minified": 61476,
+    "gzipped": 21118
   }
 }
