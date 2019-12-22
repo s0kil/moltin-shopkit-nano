@@ -4,24 +4,22 @@ import {terser} from "rollup-plugin-terser";
 import commonjs from "rollup-plugin-commonjs";
 import resolve from "rollup-plugin-node-resolve";
 import liveReload from "rollup-plugin-livereload";
-import multiEntry from "@rollup/plugin-multi-entry";
-import {sizeSnapshot} from "rollup-plugin-size-snapshot";
 import minifyLiterals from "rollup-plugin-minify-html-literals";
 
 const mode = process.env.NODE_ENV;
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
-  input: ["src/main.js", "src/cart.js"],
+  // input: ["src/shopkit.js", "src/shopkit-cart.js"],
+  input: "src/shopkit.js",
   output: {
-    file: "dist/moltin-shopkit.js",
-    format: "iife",
+    dir: "dist",
+    // file: "dist/moltin-shopkit.js",
+    format: "esm",
     sourcemap: !production
   },
 
   plugins: [
-    multiEntry(),
-
     replace({
       "process.browser": true,
       "process.env.NODE_ENV": JSON.stringify(mode)
@@ -37,7 +35,7 @@ export default {
     svelte({
       dev: !production,
       css: css => {
-        css.write("dist/moltin-shopkit.css", !production);
+        css.write("dist/shopkit.css", !production);
       }
     }),
 
@@ -47,16 +45,13 @@ export default {
 
     !production && liveReload("dist"),
 
-    production && sizeSnapshot(),
     production &&
     terser({
       compress: {
         passes: 3,
         unsafe: true,
       },
-      mangle: {
-        reserved: ["initialize", "initializeCart"]
-      }
+      // mangle: {reserved: ["initialize", "initializeCart"]}
     })
   ],
   watch: {

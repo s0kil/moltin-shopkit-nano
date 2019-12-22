@@ -1,12 +1,10 @@
-import onIdle from "on-idle";
-
 import {connect} from "./model";
 import {stripeKey} from "./helpers/api";
 
 import "./components/Theme.svelte";
 import Modal from "./components/Modal/Modal.svelte";
 
-function initializeCart() {
+export function initializeCart() {
   const cart = connect("cart");
 
   // Restore Cart Session
@@ -17,11 +15,9 @@ function initializeCart() {
   document.body.appendChild(modal);
 
   new Modal({
-    target: document.getElementById("moltin-shopkit"),
+    target: modal,
     props: {
       stripeKey
     }
   });
 }
-
-window.onload = () => onIdle(() => initializeCart());

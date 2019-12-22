@@ -5,6 +5,7 @@ dev:
 	npm run dev;
 
 prod:
+	rm -f dist/* &> /dev/null
 	npm run build;
 	rm -f dist/*.map dist/*.*.*;
 

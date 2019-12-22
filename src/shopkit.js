@@ -1,4 +1,5 @@
 import fastDom from "fastdom";
+import onBrowserIdle from "on-idle";
 import whenDomReady from "when-dom-ready";
 import {setupSyntheticEvent} from "stage0/syntheticEvents";
 import fastDomPromised from "fastdom/extensions/fastdom-promised";
@@ -91,6 +92,12 @@ function initialize(document) {
     rel: "preconnect",
     crossorigin: "anonymous",
     href: moltinAPIURL
+  });
+
+  onBrowserIdle(() => {
+    import("./shopkit-cart").then(({initializeCart}) => {
+      initializeCart();
+    });
   });
 }
 
